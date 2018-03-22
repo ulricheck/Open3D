@@ -109,17 +109,55 @@ if (Open3D_USE_NATIVE_DEPENDENCY_BUILD)
 	endif(Open3D_BUILD_PYTHON_BINDING)
 
 else (Open3D_USE_NATIVE_DEPENDENCY_BUILD)
-	message(STATUS "Use eigen3 included in Open3D")
-	set(EIGEN3_INCLUDE_DIRS "${Open3D_SOURCE_DIR}/External/Eigen")
-	message(STATUS "Build GLEW from source")
-	add_subdirectory(glew)
+    message(STATUS "Use eigen3 provided by Conan")
+    set(EIGEN3_INCLUDE_DIRS ${CONAN_INCLUDE_DIRS_EIGEN})
+
+    if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
+	    message(STATUS "Use GLEW provided by Conan")
+	    set(GLEW_FOUND 1)
+	    set(GLEW_INCLUDE_DIRS ${CONAN_INCLUDE_DIRS_GLEW})
+	    set(GLEW_LIBRARIES ${CONAN_LIBS_GLEW})
+    endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
+
+    if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glad")
+	    message(STATUS "Use GLAD provided by Conan")
+	    set(GLAD_FOUND 1)
+	    set(GLAD_INCLUDE_DIRS ${CONAN_INCLUDE_DIRS_GLAD})
+	    set(GLAD_LIBRARIES ${CONAN_LIBS_GLAD})
+    endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glad")
+
 	message(STATUS "Build libjpeg from source")
 	add_subdirectory(libjpeg)
 	message(STATUS "Build libpng from source")
 	add_subdirectory(zlib)
 	add_subdirectory(libpng)
-	message(STATUS "Build glfw from source")
-	add_subdirectory(GLFW)
+
+    message(STATUS "Use glfw provided by Conan")
+    set(GLFW_FOUND 1)
+    set(GLFW_INCLUDE_DIRS ${CONAN_INCLUDE_DIRS_GLFW})
+    set(GLFW_LIBRARIES ${CONAN_LIBS_GLFW})
+    set(GLFW_LIBRARY_DIRS ${CONAN_LIB_DIRS_GLFW})
+    find_package(OpenGL)
+    if (APPLE)
+        find_library(COCOA_FRAMEWORK Cocoa)
+        find_library(IOKIT_FRAMEWORK IOKit)
+        find_library(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
+        find_library(CORE_VIDEO_FRAMEWORK CoreVideo)
+        mark_as_advanced(COCOA_FRAMEWORK
+                         IOKIT_FRAMEWORK
+                         CORE_FOUNDATION_FRAMEWORK
+                         CORE_VIDEO_FRAMEWORK)
+        list(APPEND GLFW_LIBRARIES "${COCOA_FRAMEWORK}"
+                                   "${OPENGL_gl_LIBRARY}"
+                                   "${IOKIT_FRAMEWORK}"
+                                   "${CORE_FOUNDATION_FRAMEWORK}"
+                                   "${CORE_VIDEO_FRAMEWORK}")
+    else (APPLE)
+        set(GLFW_INCLUDE_DIRS "${GLFW_INCLUDE_DIRS}" "${OPENGL_INCLUDE_DIR}")
+        set(GLFW_LIBRARIES "${GLFW_LIBRARIES}" "${OPENGL_gl_LIBRARY}")
+    endif (APPLE)
+
+
 	message(STATUS "Build jsoncpp from source")
 	add_subdirectory(jsoncpp)
 	message(STATUS "Build tinyfiledialogs from source")
@@ -131,14 +169,21 @@ else (Open3D_USE_NATIVE_DEPENDENCY_BUILD)
 	endif(Open3D_BUILD_LIBREALSENSE)
 
 	if (Open3D_BUILD_PYTHON_BINDING)
-		add_subdirectory(pybind11)
+		message(STATUS "Use pybind11 provided by Conan")
+		find_package(pybind11 REQUIRED)
 	endif(Open3D_BUILD_PYTHON_BINDING)
 endif(Open3D_USE_NATIVE_DEPENDENCY_BUILD)
 
 # pop everything to root
 set(EIGEN3_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIRS} PARENT_SCOPE)
-set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIRS} PARENT_SCOPE)
-set(GLEW_LIBRARIES ${GLEW_LIBRARIES} PARENT_SCOPE)
+if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
+	set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIRS} PARENT_SCOPE)
+	set(GLEW_LIBRARIES ${GLEW_LIBRARIES} PARENT_SCOPE)
+endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
+if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glad")
+	set(GLAD_INCLUDE_DIRS ${GLEW_INCLUDE_DIRS} PARENT_SCOPE)
+	set(GLAD_LIBRARIES ${GLEW_LIBRARIES} PARENT_SCOPE)
+endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glad")
 set(GLFW_INCLUDE_DIRS ${GLFW_INCLUDE_DIRS} PARENT_SCOPE)
 set(GLFW_LIBRARIES ${GLFW_LIBRARIES} PARENT_SCOPE)
 set(GLFW_LIBRARY_DIRS ${GLFW_LIBRARY_DIRS} PARENT_SCOPE)

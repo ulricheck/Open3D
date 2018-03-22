@@ -6,6 +6,11 @@ endif()
 
 project(Open3D)
 
+if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup(KEEP_RPATHS)
+endif()
+
 set(Open3D_VERSION_MAJOR "1")
 set(Open3D_VERSION_MINOR "0")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${Open3D_SOURCE_DIR}/CMake)
@@ -20,6 +25,7 @@ option(Open3D_BUILD_PYTHON_BINDING "Build Python binding for Open3D" ON)
 option(Open3D_BUILD_PYTHON_BINDING_TESTS "Copy test files for Open3D Python binding" ON)
 option(Open3D_BUILD_PYTHON_BINDING_TUTORIALS "Copy tutorial files for Open3D Python binding" ON)
 option(Open3D_USE_NATIVE_DEPENDENCY_BUILD "Prioritize using native dependency build" ON)
+
 
 # default built type
 if(NOT CMAKE_BUILD_TYPE)
