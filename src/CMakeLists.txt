@@ -144,5 +144,6 @@ endif(EXISTS "${Open3D_SOURCE_DIR}/Sandbox/CMakeLists.txt")
 
 # Python binding
 if (Open3D_BUILD_PYTHON_BINDING)
+	include_directories(${PYTHON_INCLUDE_DIRS})
 	add_subdirectory(Python)
 endif(Open3D_BUILD_PYTHON_BINDING)

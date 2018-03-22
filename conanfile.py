@@ -1,8 +1,5 @@
 from conans import ConanFile, CMake, tools
-from conans.util import files
-from conans.tools import os_info, SystemPackageTool
-import os, sys
-import sysconfig
+import os
 from io import StringIO
 
 
@@ -74,7 +71,7 @@ class Open3dConan(ConanFile):
         self.copy("*", src=os.path.join(self.build_dir, "bin"), dst="bin", keep_path=False)
         self.copy("*.a", src=os.path.join(self.build_dir, "lib"), dst="lib", keep_path=False)
         self.copy("py3d.*", src=os.path.join(self.build_dir, "lib"), dst="lib/python", keep_path=False)
-        self.copy("LICENSE.Open3D", src=self.source_dir)
+        self.copy("LICENSE.Open3D")
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
