@@ -62,16 +62,14 @@ class Open3dConan(ConanFile):
         cmake.configure(source_dir="src")
         cmake.build()
         cmake.install()
-        os.rename("LICENSE", "LICENSE.Open3D")
 
     def package(self):
-        src_folder = "src"
+        src_folder = os.path.join(self.source_folder, "src")
         for name in ["Core", "IO", "Visualization"]:
             self.copy("*.h", src=os.path.join(src_folder, name), dst="include/%s" % name, keep_path=True)
-        self.copy("*", src=os.path.join(self.build_dir, "bin"), dst="bin", keep_path=False)
-        self.copy("*.a", src=os.path.join(self.build_dir, "lib"), dst="lib", keep_path=False)
-        self.copy("py3d.*", src=os.path.join(self.build_dir, "lib"), dst="lib/python", keep_path=False)
-        self.copy("LICENSE.Open3D")
+        self.copy("*", src=os.path.join(self.build_folder, "bin"), dst="bin", keep_path=False)
+        self.copy("*.a", src=os.path.join(self.build_folder, "lib"), dst="lib", keep_path=False)
+        self.copy("py3d.*", src=os.path.join(self.build_folder, "lib"), dst="lib/python", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
