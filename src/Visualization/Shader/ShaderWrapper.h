@@ -26,7 +26,14 @@
 
 #pragma once
 
+#ifdef HAVE_GLEW
 #include <GL/glew.h>
+#endif
+
+#ifdef HAVE_GLAD
+#include <glad/glad.h>
+#endif
+
 #include <Core/Geometry/Geometry.h>
 
 #include <Visualization/Visualizer/ViewControl.h>

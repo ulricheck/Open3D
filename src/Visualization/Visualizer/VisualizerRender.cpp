@@ -40,10 +40,21 @@ namespace three{
 
 bool Visualizer::InitOpenGL()
 {
+// configure script needs to make sure that only one of GLAD/GLEW is active ..	
+#ifdef HAVE_GLEW
 	if (glewInit() != GLEW_OK) {
 		PrintError("Failed to initialize GLEW.\n");
 		return false;
 	}
+#endif
+
+#ifdef HAVE_GLAD
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+    {
+        PrintError("Failed to initialize GLAD.\n");
+        return false;
+    }
+#endif
 
 	// depth test
 	glEnable(GL_DEPTH_TEST);

@@ -20,7 +20,7 @@ class Open3dConan(ConanFile):
     requires = (
         "eigen/[>=3.3.4]@camposs/stable",
         "glfw/3.2.1@camposs/stable",
-        "pybin11/2.2.1@camposs/stable",
+        "pybind11/2.2.1@camposs/stable",
         )
 
     options = {
@@ -39,7 +39,7 @@ class Open3dConan(ConanFile):
     def requirements(self):
         if self.options.opengl_extension_wrapper == 'glad':
             self.requires("glad/0.1.16a0@bincrafters/stable")
-        else if self.options.opengl_extension_wrapper == 'glew':
+        elif self.options.opengl_extension_wrapper == 'glew':
             self.requires("glew/2.1.0@camposs/stable")
 
 
@@ -62,13 +62,13 @@ class Open3dConan(ConanFile):
         if self.settings.os == "Macos":
             cmake.definitions['CMAKE_FIND_FRAMEWORK'] = "LAST"
 
-        cmake.configure()
+        cmake.configure(source_dir="src")
         cmake.build()
         cmake.install()
         os.rename("LICENSE", "LICENSE.Open3D")
 
     def package(self):
-        src_folder = os.path.join(self.source_dir, "src")
+        src_folder = "src"
         for name in ["Core", "IO", "Visualization"]:
             self.copy("*.h", src=os.path.join(src_folder, name), dst="include/%s" % name, keep_path=True)
         self.copy("*", src=os.path.join(self.build_dir, "bin"), dst="bin", keep_path=False)

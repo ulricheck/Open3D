@@ -203,6 +203,8 @@ int VisualizerWithEditing::PickPoint(double x, double y)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+#ifdef HAVE_GLEW
 	if (!GLEW_ARB_framebuffer_object){
 		// OpenGL 2.1 doesn't require this, 3.1+ does
 		printf("[PickPoint] Your GPU does not provide framebuffer objects. Use a texture instead.");
@@ -210,6 +212,10 @@ int VisualizerWithEditing::PickPoint(double x, double y)
 		glEnable(GL_MULTISAMPLE);
 		return -1;
 	}
+#endif
+
+// what about GLAD??
+
 	GLuint depth_render_buffer;
 	glGenRenderbuffers(1, &depth_render_buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, depth_render_buffer);

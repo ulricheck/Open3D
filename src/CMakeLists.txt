@@ -49,11 +49,20 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Open3D_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Open3D_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Open3D_BINARY_DIR}/bin)
 
+if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
+	add_definitions(-DHAVE_GLEW)
+endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
+if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glad")
+	add_definitions(-DHAVE_GLAD)
+endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")	
+
 # Set OS-specific things here
 if(WIN32)
 	add_definitions(-DWINDOWS)
 	add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)		# suppress C4996 warning
+	if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
 	add_definitions(-DGLEW_STATIC)		# enable GLEW for windows
+	endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
 	message(STATUS "Compiling on Windows")
 	if(MSVC)
 		message(STATUS "Compiling with MSVC")

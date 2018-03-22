@@ -29,7 +29,18 @@
 #include <string>
 #include <memory>
 
+#if defined(HAVE_GLEW) && defined(HAVE_GLAD)
+#error cannot use GLEW and GLAD at the same time.
+#endif
+
+#ifdef HAVE_GLEW
 #include <GL/glew.h>
+#endif
+
+#ifdef HAVE_GLAD
+#include <glad/glad.h>
+#endif
+
 #include <GLFW/glfw3.h>
 #include <Core/Geometry/Geometry.h>
 
