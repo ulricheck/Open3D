@@ -43,6 +43,8 @@ class Open3dConan(ConanFile):
     def configure(self):
         if self.options.opengl_extension_wrapper == 'glew':
             self.options["glew"].shared = False
+        if self.options.opengl_extension_wrapper == 'glad':
+            self.options["glad"].shared = False
         self.options["glfw"].shared = False
 
     def build(self):
