@@ -51,6 +51,7 @@ class Open3dConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions["Open3D_BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["Open3D_USE_NATIVE_DEPENDENCY_BUILD"] = False
         cmake.definitions["Open3D_BUILD_TESTS"] = False
         cmake.definitions["Open3D_BUILD_PYTHON_BINDING"] = True

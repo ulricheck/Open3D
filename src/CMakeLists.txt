@@ -25,6 +25,7 @@ option(Open3D_BUILD_PYTHON_BINDING "Build Python binding for Open3D" ON)
 option(Open3D_BUILD_PYTHON_BINDING_TESTS "Copy test files for Open3D Python binding" ON)
 option(Open3D_BUILD_PYTHON_BINDING_TUTORIALS "Copy tutorial files for Open3D Python binding" ON)
 option(Open3D_USE_NATIVE_DEPENDENCY_BUILD "Prioritize using native dependency build" ON)
+option(Open3D_BUILD_SHARED_LIBS "Build shared Libraries" OFF)
 
 
 # default built type
@@ -41,8 +42,12 @@ include_directories(
 	${Open3D_SOURCE_DIR}/External/librealsense/include
 	)
 
-# all static link, no dynamic links
-set(Open3D_LIB_TYPE STATIC)
+# static or dynamic linking
+if(Open3D_BUILD_SHARED_LIBS)
+  set(Open3D_LIB_TYPE SHARED)
+else(Open3D_BUILD_SHARED_LIBS)
+  set(Open3D_LIB_TYPE STATIC)
+endif(Open3D_BUILD_SHARED_LIBS)
 
 # if dynamic link is added, use if (WIN32) macro
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Open3D_BINARY_DIR}/lib)
