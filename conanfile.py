@@ -23,11 +23,13 @@ class Open3dConan(ConanFile):
     options = {
         "python": "ANY",
         "opengl_extension_wrapper": ["glew", "glad"],
+        "shared": [True, False],
         }
 
     default_options = (
         "python=python",
         "opengl_extension_wrapper=glad",
+        "shared=False",
         )
 
     # all sources are deployed with the package
@@ -42,10 +44,10 @@ class Open3dConan(ConanFile):
 
     def configure(self):
         if self.options.opengl_extension_wrapper == 'glew':
-            self.options["glew"].shared = False
+            self.options["glew"].shared = self.options.shared
         if self.options.opengl_extension_wrapper == 'glad':
-            self.options["glad"].shared = False
-        self.options["glfw"].shared = False
+            self.options["glad"].shared = self.options.shared
+        self.options["glfw"].shared = self.options.shared
 
     def build(self):
         cmake = CMake(self)
