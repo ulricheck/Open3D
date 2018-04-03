@@ -23,13 +23,11 @@ class Open3dConan(ConanFile):
     options = {
         "python": "ANY",
         "opengl_extension_wrapper": ["glew", "glad"],
-        "shared": [True, False],
         }
 
     default_options = (
         "python=python",
         "opengl_extension_wrapper=glad",
-        "shared=False",
         )
 
     # all sources are deployed with the package
@@ -41,17 +39,8 @@ class Open3dConan(ConanFile):
         elif self.options.opengl_extension_wrapper == 'glew':
             self.requires("glew/2.1.0@camposs/stable")
 
-
-    def configure(self):
-        if self.options.opengl_extension_wrapper == 'glew':
-            self.options["glew"].shared = self.options.shared
-        if self.options.opengl_extension_wrapper == 'glad':
-            self.options["glad"].shared = self.options.shared
-        self.options["glfw"].shared = self.options.shared
-
     def build(self):
         cmake = CMake(self)
-        cmake.definitions["Open3D_BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["Open3D_USE_NATIVE_DEPENDENCY_BUILD"] = False
         cmake.definitions["Open3D_BUILD_TESTS"] = False
         cmake.definitions["Open3D_BUILD_PYTHON_BINDING"] = True
