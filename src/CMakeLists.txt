@@ -54,6 +54,7 @@ if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
 endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")
 if(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glad")
 	add_definitions(-DHAVE_GLAD)
+	add_definitions(-DGLAD_GLAPI_EXPORT)
 endif(${OPENGL_EXTENSION_WRAPPER} STREQUAL "glew")	
 
 # Set OS-specific things here
