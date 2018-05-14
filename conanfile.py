@@ -35,7 +35,7 @@ class Open3dConan(ConanFile):
 
     def requirements(self):
         if self.options.opengl_extension_wrapper == 'glad':
-            self.requires("glad/0.1.18.0+master.20180404@camposs/stable")
+            self.requires("glad/0.1.20@camposs/stable")
         elif self.options.opengl_extension_wrapper == 'glew':
             self.requires("glew/2.1.0@camposs/stable")
 
