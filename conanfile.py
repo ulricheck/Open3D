@@ -16,8 +16,8 @@ class Open3dConan(ConanFile):
 
     requires = (
         "eigen/[>=3.3.4]@camposs/stable",
-        "glfw/3.2.1@camposs/stable",
-        "pybind11/2.2.1@camposs/stable",
+        "glfw/[>=3.2.1]@camposs/stable",
+        "pybind11/[>=2.2.1]@camposs/stable",
         )
 
     options = {
@@ -35,9 +35,9 @@ class Open3dConan(ConanFile):
 
     def requirements(self):
         if self.options.opengl_extension_wrapper == 'glad':
-            self.requires("glad/0.1.20@camposs/stable")
+            self.requires("glad/[>=0.1.23]@camposs/stable")
         elif self.options.opengl_extension_wrapper == 'glew':
-            self.requires("glew/2.1.0@camposs/stable")
+            self.requires("glew/[>=2.1.0]@camposs/stable")
 
     def build(self):
         cmake = CMake(self)
